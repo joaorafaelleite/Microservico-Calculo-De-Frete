@@ -1,50 +1,33 @@
 package com.itaulatam.ms_calculodefrete.infrastructure.entities;
 
-import com.itaulatam.ms_calculodefrete.infrastructure.interfaces.ServicoDeFrete;
+import com.itaulatam.ms_calculodefrete.infrastructure.interfaces.PedidoDeFreteInterface;
+import com.itaulatam.ms_calculodefrete.infrastructure.interfaces.ServicoDeFreteStrategyInterface;
 
 import java.math.BigDecimal;
-public class FreteExpress implements ServicoDeFrete {
-
-    private BigDecimal pesoDoPacote;
-    private BigDecimal distanciaDaEntrega;
-    private BigDecimal valorDoFrete;
+public class FreteExpress implements ServicoDeFreteStrategyInterface {
+    private  PedidoDeFreteInterface pedidoDeFrete;
 
     public FreteExpress() {
     }
 
-    public FreteExpress(BigDecimal pesoDoPacote, BigDecimal distanciaDaEntrega, BigDecimal valorDoFrete) {
-        this.pesoDoPacote = pesoDoPacote;
-        this.distanciaDaEntrega = distanciaDaEntrega;
-        this.valorDoFrete = valorDoFrete;
-    }
-
-    public BigDecimal getPesoDoPacote() {
-        return pesoDoPacote;
-    }
-
-    public BigDecimal getDistanciaDaEntrega() {
-        return distanciaDaEntrega;
-    }
-
-    public BigDecimal getValorDoFrete() {
-        return valorDoFrete;
-    }
-
-    public void setPesoDoPacote(BigDecimal pesoDoPacote) {
-        this.pesoDoPacote = pesoDoPacote;
-    }
-
-    public void setDistanciaDaEntrega(BigDecimal distanciaDaEntrega) {
-        this.distanciaDaEntrega = distanciaDaEntrega;
+    public FreteExpress(PedidoDeFreteInterface pedidoDeFrete) {
+        this.pedidoDeFrete = pedidoDeFrete;
     }
 
     @Override
-    public BigDecimal calcularValorDoFrete(BigDecimal pesoDoPacote, BigDecimal distanciaDaEntrega){
-        BigDecimal valorBase = BigDecimal.valueOf(10.0);
+    public BigDecimal calcularValorDoFrete(PedidoDeFreteInterface pedidoDeFrete){
+        BigDecimal valorDoFrete = BigDecimal.ZERO;
 
-        valorDoFrete.add(valorBase);
-        valorDoFrete.add(pesoDoPacote.multiply(BigDecimal.valueOf(1.0)));
-        valorDoFrete.add(distanciaDaEntrega.multiply(BigDecimal.valueOf(5.0)));
+        BigDecimal valorBase = BigDecimal.valueOf(10.0);
+        BigDecimal custoPorPeso = BigDecimal.valueOf(1.0);
+        BigDecimal custoPorDistancia = BigDecimal.valueOf(5.0);
+
+        BigDecimal pesoDoPacote = BigDecimal.valueOf(pedidoDeFrete.getPesoDoPacote());
+        BigDecimal distanciaDaEntrega = BigDecimal.valueOf(pedidoDeFrete.getDistanciaDaEntrega());
+
+        valorDoFrete = valorDoFrete.add(valorBase);
+        valorDoFrete = valorDoFrete.add(pesoDoPacote.multiply(custoPorPeso));
+        valorDoFrete = valorDoFrete.add(distanciaDaEntrega.multiply(custoPorDistancia));
 
         return valorDoFrete;
     }

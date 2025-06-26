@@ -1,28 +1,31 @@
 package com.itaulatam.ms_calculodefrete.infrastructure.entities;
 
-import com.itaulatam.ms_calculodefrete.infrastructure.interfaces.ServicoDeFrete;
+import com.itaulatam.ms_calculodefrete.infrastructure.interfaces.PedidoDeFreteInterface;
+import com.itaulatam.ms_calculodefrete.infrastructure.interfaces.ServicoDeFreteStrategyInterface;
+import org.springframework.stereotype.Component;
 
 import java.math.BigDecimal;
 
+@Component
 public class Frete {
-    ServicoDeFrete servicoDeFrete;
+    private ServicoDeFreteStrategyInterface servicoDeFrete;
 
     public Frete() {
     }
 
-    public Frete(ServicoDeFrete servicoDeFrete) {
+    public Frete(ServicoDeFreteStrategyInterface servicoDeFrete) {
         this.servicoDeFrete = servicoDeFrete;
     }
 
-    public ServicoDeFrete getServicoDeFrete() {
+    public ServicoDeFreteStrategyInterface getServicoDeFrete() {
         return servicoDeFrete;
     }
 
-    public void setServicoDeFrete(ServicoDeFrete servicoDeFrete) {
+    public void setServicoDeFrete(ServicoDeFreteStrategyInterface servicoDeFrete) {
         this.servicoDeFrete = servicoDeFrete;
     }
 
-    public BigDecimal calcularValorDoFrete(BigDecimal pesoDoPacote, BigDecimal distanciaDaEntrega, ServicoDeFrete servicoDeFrete){
-        return servicoDeFrete.calcularValorDoFrete(pesoDoPacote, distanciaDaEntrega);
+    public BigDecimal calcularValorDoFrete(PedidoDeFreteInterface pedidoDeFrete){
+        return servicoDeFrete.calcularValorDoFrete(pedidoDeFrete);
     }
 }
