@@ -1,37 +1,37 @@
 package com.itaulatam.ms_calculodefrete.business;
 
+import com.itaulatam.ms_calculodefrete.api.converter.PedidoDeFreteConverter;
 import com.itaulatam.ms_calculodefrete.api.request.PedidoFreteRequestDto;
 import com.itaulatam.ms_calculodefrete.api.response.PedidoDeFreteResponseDto;
-import com.itaulatam.ms_calculodefrete.infrastructure.entities.Frete;
-import com.itaulatam.ms_calculodefrete.infrastructure.entities.FreteExpress;
-import com.itaulatam.ms_calculodefrete.infrastructure.entities.FreteNormal;
-import com.itaulatam.ms_calculodefrete.infrastructure.entities.PedidoDeFrete;
-import com.itaulatam.ms_calculodefrete.infrastructure.interfaces.ServicoDeFreteStrategyInterface;
+import com.itaulatam.ms_calculodefrete.infrastructure.exceptions.BusinessException;
+import com.itaulatam.ms_calculodefrete.infrastructure.models.FreteContext;
+import com.itaulatam.ms_calculodefrete.infrastructure.models.PedidoDeFrete;
+import com.itaulatam.ms_calculodefrete.infrastructure.interfaces.FreteStrategyInterface;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 @Service
 public class FreteService {
-    private Frete frete;
-    private ServicoDeFreteStrategyInterface servicoDeFrete;
+    private PedidoDeFreteConverter pedidoDeFreteConverter;
+    private FreteContext freteContext;
 
     @Autowired
-    public FreteService(Frete frete){
-        this.frete = frete;
+    public FreteService(PedidoDeFreteConverter pedidoDeFreteConverter, FreteContext freteContext){
+        this.pedidoDeFreteConverter = pedidoDeFreteConverter;
+        this.freteContext = freteContext;
     }
 
-    public PedidoDeFreteResponseDto calcular(PedidoFreteRequestDto requestDto){
-        PedidoDeFrete pedidoDeFrete = new PedidoDeFrete(requestDto.getPesoDoPacote(), requestDto.getDistanciaDaEntrega(), requestDto.getTipoDeTransporte());
+    public PedidoDeFreteResponseDto calcular(PedidoFreteRequestDto requestDto, FreteStrategyInterface freteStrategy){
+        try {
+            PedidoDeFrete pedidoDeFrete = pedidoDeFreteConverter.paraPedidoDeFrete(requestDto);
 
-        switch (requestDto.getTipoDeTransporte()){
-            case NORMAL -> servicoDeFrete = new FreteNormal(pedidoDeFrete);
-            case EXPRESSO -> servicoDeFrete = new FreteExpress(pedidoDeFrete);
+            freteStrategy.setPedidoFrete(pedidoDeFrete);
+
+            PedidoDeFreteResponseDto responseDto = new PedidoDeFreteResponseDto(freteContext.calcularValorDoFrete(pedidoDeFrete));
+
+            return responseDto;
+        } catch (Exception e){
+            throw new BusinessException("Erro ao realizar o calculo do frete", e);
         }
-
-        frete.setServicoDeFrete(servicoDeFrete);
-
-        PedidoDeFreteResponseDto responseDto = new PedidoDeFreteResponseDto(frete.calcularValorDoFrete(pedidoDeFrete));
-
-        return responseDto;
     }
 }

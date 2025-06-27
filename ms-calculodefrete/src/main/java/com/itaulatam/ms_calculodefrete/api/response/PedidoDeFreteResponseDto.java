@@ -16,7 +16,4 @@ public class PedidoDeFreteResponseDto {
         return valorDoFrete;
     }
 
-    public void setValorDoFrete(BigDecimal valorDoFrete) {
-        this.valorDoFrete = valorDoFrete;
-    }
 }

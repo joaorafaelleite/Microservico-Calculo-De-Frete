@@ -1,10 +1,8 @@
-package com.itaulatam.ms_calculodefrete.infrastructure.entities;
+package com.itaulatam.ms_calculodefrete.infrastructure.models;
 
 import com.itaulatam.ms_calculodefrete.infrastructure.enums.Transporte;
 import com.itaulatam.ms_calculodefrete.infrastructure.interfaces.PedidoDeFreteInterface;
 import org.springframework.stereotype.Component;
-
-import java.math.BigDecimal;
 
 @Component
 public class PedidoDeFrete implements PedidoDeFreteInterface {

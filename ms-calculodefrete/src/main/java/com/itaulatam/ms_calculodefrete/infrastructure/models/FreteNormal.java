@@ -1,11 +1,13 @@
-package com.itaulatam.ms_calculodefrete.infrastructure.entities;
+package com.itaulatam.ms_calculodefrete.infrastructure.models;
 
 import com.itaulatam.ms_calculodefrete.infrastructure.interfaces.PedidoDeFreteInterface;
-import com.itaulatam.ms_calculodefrete.infrastructure.interfaces.ServicoDeFreteStrategyInterface;
+import com.itaulatam.ms_calculodefrete.infrastructure.interfaces.FreteStrategyInterface;
+import org.springframework.stereotype.Component;
 
 import java.math.BigDecimal;
 
-public class FreteNormal implements ServicoDeFreteStrategyInterface {
+@Component
+public class FreteNormal implements FreteStrategyInterface {
     private PedidoDeFreteInterface pedidoDeFrete;
 
     public FreteNormal() {
@@ -15,6 +17,10 @@ public class FreteNormal implements ServicoDeFreteStrategyInterface {
         this.pedidoDeFrete = pedidoDeFrete;
     }
 
+    @Override
+    public void setPedidoFrete(PedidoDeFreteInterface pedidoDeFrete){
+        this.pedidoDeFrete = pedidoDeFrete;
+    }
 
     @Override
     public BigDecimal calcularValorDoFrete(PedidoDeFreteInterface pedidoDeFrete){
