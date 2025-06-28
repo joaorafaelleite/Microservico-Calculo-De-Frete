@@ -1,0 +1,47 @@
+package com.itaulatam.mscalculodefrete.infrastructure.models;
+
+import com.itaulatam.mscalculodefrete.infrastructure.exceptions.BusinessException;
+import com.itaulatam.mscalculodefrete.infrastructure.exceptions.PedidoDeFreteException;
+import com.itaulatam.mscalculodefrete.infrastructure.interfaces.PedidoDeFreteInterface;
+import com.itaulatam.mscalculodefrete.infrastructure.interfaces.FreteStrategyInterface;
+import org.springframework.stereotype.Component;
+
+import java.math.BigDecimal;
+
+import static java.util.Objects.isNull;
+
+@Component
+public class FreteContext {
+    private FreteStrategyInterface freteStrategy;
+
+    public FreteContext() {
+    }
+
+    public FreteContext(FreteStrategyInterface freteStrategy) {
+        this.freteStrategy = freteStrategy;
+    }
+
+    public FreteStrategyInterface getServicoDeFrete() {
+        return freteStrategy;
+    }
+
+    public void setFreteStrategy(FreteStrategyInterface freteStrategy) {
+        this.freteStrategy = freteStrategy;
+    }
+
+    public BigDecimal calcularValorDoFrete(PedidoDeFreteInterface pedidoDeFrete){
+        if(isNull(freteStrategy)){
+            throw new BusinessException();
+        }
+
+        try {
+            if(isNull(pedidoDeFrete)) {
+                throw new PedidoDeFreteException();
+            }
+            return freteStrategy.calcularValorDoFrete(pedidoDeFrete);
+        }catch (Exception e){
+            throw new BusinessException();
+        }
+
+    }
+}
