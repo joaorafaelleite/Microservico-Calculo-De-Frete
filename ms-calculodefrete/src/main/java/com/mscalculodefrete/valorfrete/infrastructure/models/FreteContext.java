@@ -34,10 +34,11 @@ public class FreteContext {
             throw new BusinessException();
         }
 
+        if(isNull(pedidoDeFrete)) {
+            throw new PedidoDeFreteException();
+        }
+
         try {
-            if(isNull(pedidoDeFrete)) {
-                throw new PedidoDeFreteException();
-            }
             return freteStrategy.calcularValorDoFrete(pedidoDeFrete);
         }catch (Exception e){
             throw new BusinessException();

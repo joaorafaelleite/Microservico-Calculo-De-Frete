@@ -36,4 +36,15 @@ public class PedidoFreteRequestDto {
         return tipoDeTransporte;
     }
 
+    public void setPesoDoPacote(Double pesoDoPacote) {
+        this.pesoDoPacote = pesoDoPacote;
+    }
+
+    public void setDistanciaDaEntrega(Double distanciaDaEntrega) {
+        this.distanciaDaEntrega = distanciaDaEntrega;
+    }
+
+    public void setTipoDeTransporte(String tipoDeTransporte) {
+        this.tipoDeTransporte = tipoDeTransporte;
+    }
 }
