@@ -4,6 +4,8 @@ import com.mscalculodefrete.valorfrete.api.converter.PedidoDeFreteConverter;
 import com.mscalculodefrete.valorfrete.api.request.PedidoFreteRequestDto;
 import com.mscalculodefrete.valorfrete.api.response.PedidoDeFreteResponseDto;
 import com.mscalculodefrete.valorfrete.business.usecases.TransporteUseCase;
+import com.mscalculodefrete.valorfrete.infrastructure.enums.Transporte;
+import com.mscalculodefrete.valorfrete.infrastructure.exceptions.TransporteException;
 import com.mscalculodefrete.valorfrete.infrastructure.models.FreteContext;
 import com.mscalculodefrete.valorfrete.infrastructure.models.PedidoDeFrete;
 import org.springframework.stereotype.Service;
@@ -21,7 +23,15 @@ public class FreteService {
     }
 
     public PedidoDeFreteResponseDto calcular(PedidoFreteRequestDto requestDto) {
-        PedidoDeFrete pedidoDeFrete = pedidoDeFreteConverter.paraPedidoDeFrete(requestDto);
+        Transporte transporte;
+
+        try {
+            transporte = Transporte.valueOf(requestDto.getTipoDeTransporte());
+        } catch (Exception exception) {
+            throw new TransporteException();
+        }
+
+        PedidoDeFrete pedidoDeFrete = pedidoDeFreteConverter.paraPedidoDeFrete(requestDto, transporte);
 
         transporteUseCase.selecionarFreteStrategy(pedidoDeFrete);
 

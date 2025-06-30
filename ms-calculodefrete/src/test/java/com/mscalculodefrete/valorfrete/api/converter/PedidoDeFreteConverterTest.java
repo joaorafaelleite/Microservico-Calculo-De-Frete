@@ -1,11 +1,10 @@
 package com.mscalculodefrete.valorfrete.api.converter;
 
 import com.mscalculodefrete.valorfrete.api.request.PedidoFreteRequestDto;
+import com.mscalculodefrete.valorfrete.api.response.PedidoDeFreteResponseDto;
 import com.mscalculodefrete.valorfrete.infrastructure.enums.Transporte;
-import com.mscalculodefrete.valorfrete.infrastructure.exceptions.TransporteException;
 import com.mscalculodefrete.valorfrete.infrastructure.models.FreteContext;
 import com.mscalculodefrete.valorfrete.infrastructure.models.PedidoDeFrete;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import java.math.BigDecimal;
@@ -15,47 +14,27 @@ import static org.mockito.Mockito.*;
 
 class PedidoDeFreteConverterTest {
 
-    private PedidoDeFreteConverter converter;
+    private final PedidoDeFreteConverter converter = new PedidoDeFreteConverter();
 
-    @BeforeEach
-    void setUp() {
-        converter = new PedidoDeFreteConverter();
+    @Test
+    void paraPedidoDeFrete_DeveConverterCorretamente() {
+        PedidoFreteRequestDto dto = new PedidoFreteRequestDto(2.0, 20.0, "NORMAL");
+        PedidoDeFrete pedido = converter.paraPedidoDeFrete(dto, Transporte.NORMAL);
+
+        assertEquals(2.0, pedido.getPesoDoPacote());
+        assertEquals(20.0, pedido.getDistanciaDaEntrega());
+        assertEquals(Transporte.NORMAL, pedido.getTipoDeTransporte());
     }
 
     @Test
-    void paraPedidoDeFreteSucesso() {
-        PedidoFreteRequestDto dto = new PedidoFreteRequestDto();
-        dto.setPesoDoPacote(10.0);
-        dto.setDistanciaDaEntrega(100.0);
-        dto.setTipoDeTransporte("NORMAL");
+    void paraPedidoDeFreteResponseDto_DeveConverterCorretamente() {
+        PedidoDeFrete pedido = mock(PedidoDeFrete.class);
+        FreteContext context = mock(FreteContext.class);
+        when(context.calcularValorDoFrete(pedido)).thenReturn(BigDecimal.valueOf(42));
 
-        var pedidoDeFrete = converter.paraPedidoDeFrete(dto);
+        PedidoDeFreteResponseDto response = converter.paraPedidoDeFreteResponseDto(pedido, context);
 
-        assertNotNull(pedidoDeFrete);
-        assertEquals(10.0, pedidoDeFrete.getPesoDoPacote());
-        assertEquals(100.0, pedidoDeFrete.getDistanciaDaEntrega());
-        assertEquals(Transporte.NORMAL, pedidoDeFrete.getTipoDeTransporte());
-    }
-
-    @Test
-    void paraPedidoDeFreteErroTransporteInvalido() {
-        PedidoFreteRequestDto dto = new PedidoFreteRequestDto(10.0,100.00, "INVALIDO");
-
-        RuntimeException thrown = assertThrows(TransporteException.class, () -> converter.paraPedidoDeFrete(dto));
-
-        assertEquals("Tipo de frente inválido, favor selecionar um tipo de frente válido", thrown.getMessage());
-    }
-
-    @Test
-    void paraPedidoDeFreteResponseDtoSucesso() {
-        PedidoDeFrete pedidoDeFrete = new PedidoDeFrete(10.0, 100.0, Transporte.NORMAL);
-
-        var freteContextMock = mock(FreteContext.class);
-        when(freteContextMock.calcularValorDoFrete(pedidoDeFrete)).thenReturn(BigDecimal.valueOf(123.45));
-
-        var responseDto = converter.paraPedidoDeFreteResponseDto(pedidoDeFrete, freteContextMock);
-
-        assertNotNull(responseDto);
-        assertEquals(BigDecimal.valueOf(123.45), responseDto.getValorDoFrete());
+        assertEquals(BigDecimal.valueOf(42), response.getValorDoFrete());
+        verify(context).calcularValorDoFrete(pedido);
     }
 }

@@ -2,9 +2,12 @@ package com.mscalculodefrete.valorfrete.business;
 
 import com.mscalculodefrete.valorfrete.api.converter.PedidoDeFreteConverter;
 import com.mscalculodefrete.valorfrete.api.request.PedidoFreteRequestDto;
+import com.mscalculodefrete.valorfrete.api.response.PedidoDeFreteResponseDto;
 import com.mscalculodefrete.valorfrete.business.usecases.TransporteUseCase;
-import com.mscalculodefrete.valorfrete.infrastructure.exceptions.ConverterException;
+import com.mscalculodefrete.valorfrete.infrastructure.enums.Transporte;
+import com.mscalculodefrete.valorfrete.infrastructure.exceptions.TransporteException;
 import com.mscalculodefrete.valorfrete.infrastructure.models.FreteContext;
+import com.mscalculodefrete.valorfrete.infrastructure.models.PedidoDeFrete;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -42,18 +45,27 @@ class FreteServiceTest {
     }
 
     @Test
-    void calcularTesteCasoDeErroDeAoConverterRequest() {
-        PedidoFreteRequestDto requestDto = new PedidoFreteRequestDto();
+    void calcular_DeveRetornarResponseDto_QuandoTudoValido() {
+        PedidoFreteRequestDto requestDto = new PedidoFreteRequestDto(1.0, 10.0, "NORMAL");
+        PedidoDeFrete pedidoDeFrete = mock(PedidoDeFrete.class);
+        PedidoDeFreteResponseDto responseDto = new PedidoDeFreteResponseDto(java.math.BigDecimal.TEN);
 
-        when(pedidoDeFreteConverter.paraPedidoDeFrete(requestDto))
-                .thenThrow(new ConverterException("Erro ao tentar converter um objeto requestDto para um objeto concreto"));
+        when(pedidoDeFreteConverter.paraPedidoDeFrete(requestDto, Transporte.NORMAL)).thenReturn(pedidoDeFrete);
+        when(pedidoDeFreteConverter.paraPedidoDeFreteResponseDto(pedidoDeFrete, freteContext)).thenReturn(responseDto);
 
-        RuntimeException thrown = assertThrows(RuntimeException.class, () ->
-                freteService.calcular(requestDto)
-        );
+        PedidoDeFreteResponseDto result = freteService.calcular(requestDto);
 
-        assertEquals("Erro ao tentar converter um objeto requestDto para um objeto concreto", thrown.getMessage());
-        verify(pedidoDeFreteConverter).paraPedidoDeFrete(requestDto);
-        verifyNoMoreInteractions(transporteUseCase, freteContext);
+        assertEquals(responseDto, result);
+        verify(pedidoDeFreteConverter).paraPedidoDeFrete(requestDto, Transporte.NORMAL);
+        verify(transporteUseCase).selecionarFreteStrategy(pedidoDeFrete);
+        verify(pedidoDeFreteConverter).paraPedidoDeFreteResponseDto(pedidoDeFrete, freteContext);
+    }
+
+    @Test
+    void calcular_DeveLancarTransporteException_QuandoTipoTransporteInvalido() {
+        PedidoFreteRequestDto requestDto = new PedidoFreteRequestDto(1.0, 10.0, "INVALIDO");
+
+        assertThrows(TransporteException.class, () -> freteService.calcular(requestDto));
+        verifyNoInteractions(pedidoDeFreteConverter, transporteUseCase, freteContext);
     }
 }
