@@ -25,12 +25,4 @@ public class ObjetoErro {
         return mensagem;
     }
 
-    public void setStatus(HttpStatus status) {
-        this.status = status;
-    }
-
-    public void setMensagem(String mensagem) {
-        this.mensagem = mensagem;
-    }
-
 }

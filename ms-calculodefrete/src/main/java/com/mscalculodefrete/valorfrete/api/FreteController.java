@@ -20,7 +20,7 @@ public class FreteController
     }
 
     @PostMapping("/calcular")
-    public PedidoDeFreteResponseDto calcular(@Valid @RequestBody PedidoFreteRequestDto requestDto) throws Exception {
+    public PedidoDeFreteResponseDto calcular(@Valid @RequestBody PedidoFreteRequestDto requestDto) {
         return  freteService.calcular(requestDto);
     }
 }

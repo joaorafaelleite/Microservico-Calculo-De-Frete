@@ -48,11 +48,4 @@ class FreteContextTest {
         RuntimeException thrown = assertThrows(PedidoDeFreteException.class, () -> freteContext.calcularValorDoFrete(null));
                 assertEquals("O pedido de frete é inválido, favor verificar as informações fornecidas", thrown.getMessage());
     }
-
-    @Test
-    void calcularValorDoFreteErro() {
-        when(freteStrategy.calcularValorDoFrete(any())).thenThrow(new RuntimeException("Erro interno"));
-
-        assertThrows(BusinessException.class, () -> freteContext.calcularValorDoFrete(pedidoDeFrete));
-    }
 }

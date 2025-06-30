@@ -21,10 +21,6 @@ public class FreteContext {
         this.freteStrategy = freteStrategy;
     }
 
-    public FreteStrategyInterface getServicoDeFrete() {
-        return freteStrategy;
-    }
-
     public void setFreteStrategy(FreteStrategyInterface freteStrategy) {
         this.freteStrategy = freteStrategy;
     }
@@ -38,11 +34,6 @@ public class FreteContext {
             throw new PedidoDeFreteException();
         }
 
-        try {
-            return freteStrategy.calcularValorDoFrete(pedidoDeFrete);
-        }catch (Exception e){
-            throw new BusinessException();
-        }
-
+        return freteStrategy.calcularValorDoFrete(pedidoDeFrete);
     }
 }

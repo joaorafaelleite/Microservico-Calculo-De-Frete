@@ -30,16 +30,4 @@ public class PedidoDeFrete implements PedidoDeFreteInterface {
     public Transporte getTipoDeTransporte() {
         return tipoDeTransporte;
     }
-
-    public void setPesoDoPacote(Double pesoDoPacote) {
-        this.pesoDoPacote = pesoDoPacote;
-    }
-
-    public void setDistanciaDaEntrega(Double distanciaDaEntrega) {
-        this.distanciaDaEntrega = distanciaDaEntrega;
-    }
-
-    public void setTipoDeTransporte(Transporte tipoDeTransporte) {
-        this.tipoDeTransporte = tipoDeTransporte;
-    }
 }

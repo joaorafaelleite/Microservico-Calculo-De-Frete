@@ -5,11 +5,11 @@ import jakarta.validation.constraints.NotNull;
 
 public class PedidoFreteRequestDto {
     @NotNull(message = "É obrigatório informar o peso da encomenda a ser entregue")
-    @DecimalMin(value = "0", message = "O valor não pode ser negativo")
+    @DecimalMin(value = "0", message = "O peso não pode ser negativo, por favor forneça um valor válido")
     private Double pesoDoPacote;
 
     @NotNull(message = "É obrigatório informar a distância a ser percorrida na entrega")
-    @DecimalMin(value = "0", message = "O valor não pode ser negativo")
+    @DecimalMin(value = "0", message = "A distância não pode ser negativo, por favor forneça um valor válido")
     private Double distanciaDaEntrega;
 
     @NotNull(message = "É obrigatório informar o tipo de transporte que deseja utilizar")

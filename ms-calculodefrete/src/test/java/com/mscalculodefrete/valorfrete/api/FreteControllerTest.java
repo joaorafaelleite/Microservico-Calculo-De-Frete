@@ -9,8 +9,6 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 
-import java.math.BigDecimal;
-
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -54,19 +52,6 @@ class FreteControllerIntegrationTest {
     }
 
     @Test
-    void calcularErroNoCalculo() throws Exception {
-        var requestDto = new PedidoFreteRequestDto();
-        requestDto.setPesoDoPacote(100.00);
-        requestDto.setDistanciaDaEntrega(100.00);
-        requestDto.setTipoDeTransporte(null);
-
-        mockMvc.perform(post("/frete/calcular")
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content(objectMapper.writeValueAsString(requestDto)))
-                .andExpect(status().isBadRequest());
-    }
-
-    @Test
     void calcularErroTransporteInvalido() throws Exception {
         var requestDto = new PedidoFreteRequestDto();
         requestDto.setPesoDoPacote(100.00);
@@ -78,8 +63,6 @@ class FreteControllerIntegrationTest {
                         .content(objectMapper.writeValueAsString(requestDto)))
                 .andExpect(status().isBadRequest());
     }
-
-
 
     @Test
     void calcularErro400PayloadIncompleto() throws Exception {

@@ -19,7 +19,7 @@ public class TransporteUseCase {
         this.freteContext = freteContext;
     }
 
-    public FreteStrategyInterface selecionarFreteStrategy(PedidoDeFrete pedidoDeFrete) {
+    public void selecionarFreteStrategy(PedidoDeFrete pedidoDeFrete) {
         Transporte transporte = pedidoDeFrete.getTipoDeTransporte();
 
         if(isNull(transporte)){
@@ -29,12 +29,9 @@ public class TransporteUseCase {
         FreteStrategyInterface freteStrategy = switch (transporte) {
             case NORMAL -> new FreteNormal();
             case EXPRESSO -> new FreteExpresso();
-            default -> throw new TransporteException();
         };
 
         freteContext.setFreteStrategy(freteStrategy);
-
-        return freteStrategy;
     }
 
 }

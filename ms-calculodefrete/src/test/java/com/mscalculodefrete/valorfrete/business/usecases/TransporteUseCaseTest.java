@@ -2,18 +2,19 @@ package com.mscalculodefrete.valorfrete.business.usecases;
 
 import com.mscalculodefrete.valorfrete.infrastructure.enums.Transporte;
 import com.mscalculodefrete.valorfrete.infrastructure.exceptions.TransporteException;
-import com.mscalculodefrete.valorfrete.infrastructure.interfaces.FreteStrategyInterface;
 import com.mscalculodefrete.valorfrete.infrastructure.models.FreteContext;
 import com.mscalculodefrete.valorfrete.infrastructure.models.PedidoDeFrete;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.mockito.Mock;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
 class TransporteUseCaseTest {
-
+    @Mock
     private FreteContext freteContext;
+
     private TransporteUseCase transporteUseCase;
 
     @BeforeEach
@@ -21,50 +22,33 @@ class TransporteUseCaseTest {
         freteContext = mock(FreteContext.class);
         transporteUseCase = new TransporteUseCase(freteContext);
     }
-
     @Test
-    void selecionarFreteStrategyFreteNormal() {
-        PedidoDeFrete pedido = new PedidoDeFrete(100.00,100.00,null);
-        pedido.setTipoDeTransporte(Transporte.NORMAL);
+    void selecionarFreteStrategyDeveSetarFreteNormalQuandoTransporteNormal() {
+        PedidoDeFrete pedido = mock(PedidoDeFrete.class);
+        when(pedido.getTipoDeTransporte()).thenReturn(Transporte.NORMAL);
 
-        FreteStrategyInterface strategy = transporteUseCase.selecionarFreteStrategy(pedido);
+        transporteUseCase.selecionarFreteStrategy(pedido);
 
-        assertNotNull(strategy);
-        assertEquals("FreteNormal", strategy.getClass().getSimpleName());
-        verify(freteContext).setFreteStrategy(strategy);
+        verify(freteContext).setFreteStrategy(isA(com.mscalculodefrete.valorfrete.infrastructure.models.FreteNormal.class));
     }
 
     @Test
-    void selecionarFreteStrategyFreteExpresso() {
-        PedidoDeFrete pedido = new PedidoDeFrete(100.00,100.00,null);
-        pedido.setTipoDeTransporte(Transporte.EXPRESSO);
+    void selecionarFreteStrategyDeveSetarFreteExpressoQuandoTransporteExpresso() {
+        PedidoDeFrete pedido = mock(PedidoDeFrete.class);
+        when(pedido.getTipoDeTransporte()).thenReturn(Transporte.EXPRESSO);
 
-        FreteStrategyInterface strategy = transporteUseCase.selecionarFreteStrategy(pedido);
+        transporteUseCase.selecionarFreteStrategy(pedido);
 
-        assertNotNull(strategy);
-        assertEquals("FreteExpresso", strategy.getClass().getSimpleName());
-        verify(freteContext).setFreteStrategy(strategy);
+        verify(freteContext).setFreteStrategy(isA(com.mscalculodefrete.valorfrete.infrastructure.models.FreteExpresso.class));
     }
 
     @Test
     void selecionarFreteStrategyErroTransporteNulo() {
-        PedidoDeFrete pedido = new PedidoDeFrete();
-        pedido.setTipoDeTransporte(null);
+        PedidoDeFrete pedido = mock(PedidoDeFrete.class);
+        when(pedido.getTipoDeTransporte()).thenReturn(null);
 
         assertThrows(TransporteException.class, () -> transporteUseCase.selecionarFreteStrategy(pedido));
         verifyNoInteractions(freteContext);
     }
 
-    @Test
-    void selecionarFreteStrategyErroTransporteInvalido() {
-        PedidoDeFrete pedido = new PedidoDeFrete() {
-            @Override
-            public Transporte getTipoDeTransporte() {
-                return null;
-            }
-        };
-
-        assertThrows(TransporteException.class, () -> transporteUseCase.selecionarFreteStrategy(pedido));
-        verifyNoInteractions(freteContext);
-    }
 }

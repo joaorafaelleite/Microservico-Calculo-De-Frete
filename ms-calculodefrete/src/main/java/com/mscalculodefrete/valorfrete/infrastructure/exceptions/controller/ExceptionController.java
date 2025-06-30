@@ -1,9 +1,8 @@
 package com.mscalculodefrete.valorfrete.infrastructure.exceptions.controller;
 
-import com.mscalculodefrete.valorfrete.infrastructure.exceptions.BusinessException;
 import com.mscalculodefrete.valorfrete.infrastructure.exceptions.ObjetoErro;
-import com.mscalculodefrete.valorfrete.infrastructure.exceptions.PedidoDeFreteException;
 import com.mscalculodefrete.valorfrete.infrastructure.exceptions.TransporteException;
+
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.HttpStatusCode;
@@ -18,32 +17,18 @@ import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExcep
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.stream.Collectors;
-
 
 @ControllerAdvice
 public class ExceptionController extends ResponseEntityExceptionHandler {
-    @ExceptionHandler(PedidoDeFreteException.class)
-    private ResponseEntity<ObjetoErro> pedidoIncorreto(PedidoDeFreteException exception){
-        ObjetoErro erro = new ObjetoErro(HttpStatus.BAD_REQUEST, exception.getMessage());
-        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(erro);
-    }
-
     @ExceptionHandler(TransporteException.class)
     private ResponseEntity<ObjetoErro> transporteInvalido(TransporteException exception){
         ObjetoErro erro = new ObjetoErro(HttpStatus.BAD_REQUEST, exception.getMessage());
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(erro);
     }
 
-    @ExceptionHandler(BusinessException.class)
-    private ResponseEntity<ObjetoErro> calculoDeFreteInvalido(BusinessException exception){
-        ObjetoErro erro = new ObjetoErro(HttpStatus.INTERNAL_SERVER_ERROR, exception.getMessage());
-        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(erro);
-    }
-
     @Override
     protected ResponseEntity<Object> handleMethodArgumentNotValid(MethodArgumentNotValidException ex, HttpHeaders headers, HttpStatusCode status, WebRequest request) {
-        List<ObjetoErro> errors = ex.getBindingResult().getFieldErrors().stream().map(FieldError::getDefaultMessage).map(mensagem -> new ObjetoErro(status,mensagem)).collect(Collectors.toList());
+        List<ObjetoErro> errors = ex.getBindingResult().getFieldErrors().stream().map(FieldError::getDefaultMessage).map(mensagem -> new ObjetoErro(status,mensagem)).toList();
         return new ResponseEntity<>(getErrorsMap(errors), new HttpHeaders(), HttpStatus.BAD_REQUEST);
     }
 

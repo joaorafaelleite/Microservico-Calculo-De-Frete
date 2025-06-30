@@ -8,13 +8,7 @@ import java.math.BigDecimal;
 
 @Component
 public class FreteNormal implements FreteStrategyInterface {
-    private PedidoDeFreteInterface pedidoDeFrete;
-
     public FreteNormal() {
-    }
-
-    public FreteNormal(PedidoDeFreteInterface pedidoDeFrete) {
-        this.pedidoDeFrete = pedidoDeFrete;
     }
 
     @Override
