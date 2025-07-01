@@ -58,9 +58,9 @@ Caso queira utilizar o Postman para realizar maiores testes, incluindo cenários
 Execute o comando **mvn clean verify**
 
 ### 2️⃣ Verificando métricas de teste
-Navegue até o diretório /ms-calculodefrete/target/site/jacoco
+Dentro da pasta do projeto, navegue até o diretório **\target\site\jacoco**
 
-Execute o arquivo index.html
+Execute o arquivo **index.html**
 
 ## Design do Sistema
 ### Arquitetura
