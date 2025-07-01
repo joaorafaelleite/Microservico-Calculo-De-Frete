@@ -28,7 +28,7 @@ Este projeto implementa um microserviço para cálculo de frete, desenvolvido em
 git clone https://github.com/joaorafaelleite/Microservico-Calculo-De-Frete.git
 
 ### 2️⃣ Instale as dependências
-mvn clean install
+Execute o comando **mvn clean install**
 
 ## Uso do Projeto
 
@@ -55,7 +55,9 @@ Caso queira utilizar o Postman para realizar maiores testes, incluindo cenários
 ## Execução de Testes e Métricas de Testes
 
 ### 1️⃣ Execução
-Execute o Run 'Tests in 'java''
+Execute o comando **mvn clean verify**
+
+Execute o comando **mvn test**
 
 ### 2️⃣ Verificando métricas de teste
 Navegue até o diretório /ms-calculodefrete/target/site/jacoco
