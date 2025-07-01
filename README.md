@@ -4,7 +4,7 @@
 ![Spring](https://img.shields.io/badge/spring-%236DB33F.svg?style=for-the-badge&logo=spring&logoColor=white)
 [![Licence](https://img.shields.io/github/license/Ileriayo/markdown-badges?style=for-the-badge)](./LICENSE)
 
-Este projeto implementa um microserviço para realizar o cálculo de frete, ele foi desenvolvido utilizando-se **Java**, **SpringBoot** e **Maven**, além de **JUnit** para realizar os testes e **JaCoCo** para metrificar os testes.
+Este projeto implementa um microserviço para cálculo de frete, desenvolvido em **Java**, **Spring Boot** e **Maven**, utilizando **JUnit** para testes e **JaCoCo** para cobertura de testes.
 
 ## Índice
 - [Funcionalidades](#funcionalidades)
@@ -37,7 +37,7 @@ Execute o run na classe MsCalculodefreteApplication
 
 ### Endpoint
 
-**POST EVENT**
+**Exemplo de Requisição**
 ```markdown
 POST /frete/calcular - Realiza o cálculo do valor do frete de entrega para o tipo de transporte selecionado
 ```
@@ -48,7 +48,7 @@ POST /frete/calcular - Realiza o cálculo do valor do frete de entrega para o ti
     "tipoDeTransporte": "NORMAL"
 }
 ```
-Caso queira utilizar o Postman para realizar maiores testes, incluido cenários de erro, utilize a coleção:
+Caso queira utilizar o Postman para realizar maiores testes, incluindo cenários de erro, utilize a coleção:
 [MS-CalculoDeFrete Collection](https://web.postman.co/workspace/My-Workspace~ed064f2a-36a9-4345-822f-d5e18684c318/collection/26395023-70a56168-8b96-4523-b00e-99153bf6ce70?action=share&source=copy-link&creator=26395023)
 
 
@@ -69,8 +69,8 @@ Este projeto implementa a arquitetura hexagonal, separando as responsabilidades 
 ### SOLID
 O projeto foi desenvolvido tendo-se em mente os princípios SOLID, visando um projeto mais coeso, reaproveitável, com baixo acoplamento e fácil manutenção.
 
-**S**: Single Responsiblity Principle (Princípio da responsabilidade única)
-  - As classes e métodos foram pensandos de forma a terem apenas uma ração para serem alterados.
+**S**: Single Responsibility Principle (Princípio da responsabilidade única)
+  - As classes e métodos foram pensados de forma a terem apenas uma razão para serem alterados.
 
 **O**: Open-Closed Principle (Princípio Aberto-Fechado)
   - Novas estratégias de frete podem ser adicionadas sem modificar o core.
