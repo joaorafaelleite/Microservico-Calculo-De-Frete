@@ -4,10 +4,7 @@ import com.mscalculodefrete.valorfrete.infrastructure.enums.Transporte;
 import com.mscalculodefrete.valorfrete.infrastructure.exceptions.TransporteException;
 import com.mscalculodefrete.valorfrete.infrastructure.interfaces.FreteStrategyInterface;
 import com.mscalculodefrete.valorfrete.infrastructure.models.FreteContext;
-import com.mscalculodefrete.valorfrete.infrastructure.models.FreteExpresso;
-import com.mscalculodefrete.valorfrete.infrastructure.models.FreteNormal;
 import com.mscalculodefrete.valorfrete.infrastructure.models.PedidoDeFrete;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.util.Map;

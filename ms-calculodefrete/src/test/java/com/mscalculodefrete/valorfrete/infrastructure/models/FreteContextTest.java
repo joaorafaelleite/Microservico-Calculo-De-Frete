@@ -38,8 +38,8 @@ class FreteContextTest {
 
     @Test
     void deveLancarExcecaoQuandoStrategyNaoDefinida() {
-        PedidoDeFreteInterface pedidoMock = mock(PedidoDeFrete.class);
-        FreteContext freteContext = new FreteContext();
+        pedidoMock = mock(PedidoDeFrete.class);
+        freteContext = new FreteContext();
 
         BusinessException ex = assertThrows(BusinessException.class,
                 () -> freteContext.calcularValorDoFrete(pedidoMock));
