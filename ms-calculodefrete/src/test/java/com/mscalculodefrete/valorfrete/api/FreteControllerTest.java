@@ -9,9 +9,8 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @SpringBootTest
 @AutoConfigureMockMvc
@@ -24,11 +23,8 @@ class FreteControllerIntegrationTest {
     private ObjectMapper objectMapper;
 
     @Test
-    void calcularSucessoFreteNormal() throws Exception {
-        var requestDto = new PedidoFreteRequestDto();
-        requestDto.setPesoDoPacote(100.00);
-        requestDto.setDistanciaDaEntrega(100.00);
-        requestDto.setTipoDeTransporte("NORMAL");
+    void deveCalcularFreteNormalComSucesso() throws Exception {
+        var requestDto = new PedidoFreteRequestDto(100.00, 100.00, "NORMAL");
 
         mockMvc.perform(post("/frete/calcular")
                         .contentType(MediaType.APPLICATION_JSON)
@@ -38,11 +34,8 @@ class FreteControllerIntegrationTest {
     }
 
     @Test
-    void calcularSucessoFreteExpresso() throws Exception {
-        var requestDto = new PedidoFreteRequestDto();
-        requestDto.setPesoDoPacote(100.00);
-        requestDto.setDistanciaDaEntrega(100.00);
-        requestDto.setTipoDeTransporte("EXPRESSO");
+    void deveCalcularFreteExpressoComSucesso() throws Exception {
+        var requestDto = new PedidoFreteRequestDto(100.00, 100.00, "EXPRESSO");
 
         mockMvc.perform(post("/frete/calcular")
                         .contentType(MediaType.APPLICATION_JSON)
@@ -52,11 +45,8 @@ class FreteControllerIntegrationTest {
     }
 
     @Test
-    void calcularErroTransporteInvalido() throws Exception {
-        var requestDto = new PedidoFreteRequestDto();
-        requestDto.setPesoDoPacote(100.00);
-        requestDto.setDistanciaDaEntrega(100.00);
-        requestDto.setTipoDeTransporte("ULTRA EXPRESSO");
+    void deveRetornarBadRequestParaTransporteInvalido() throws Exception {
+        var requestDto = new PedidoFreteRequestDto(100.00, 100.00, "ULTRA EXPRESSO");
 
         mockMvc.perform(post("/frete/calcular")
                         .contentType(MediaType.APPLICATION_JSON)
@@ -65,7 +55,7 @@ class FreteControllerIntegrationTest {
     }
 
     @Test
-    void calcularErro400PayloadIncompleto() throws Exception {
+    void deveRetornarBadRequestParaPayloadIncompleto() throws Exception {
         String payloadInvalido = "{}";
 
         mockMvc.perform(post("/frete/calcular")
@@ -75,11 +65,8 @@ class FreteControllerIntegrationTest {
     }
 
     @Test
-    void calcularErro400FaltaTipoDeTransporte() throws Exception {
-        var requestDto = new PedidoFreteRequestDto();
-        requestDto.setPesoDoPacote(100.00);
-        requestDto.setDistanciaDaEntrega(100.00);
-        requestDto.setTipoDeTransporte(null);
+    void deveRetornarBadRequestParaFaltaTipoDeTransporte() throws Exception {
+        var requestDto = new PedidoFreteRequestDto(100.00, 100.00, null);
 
         mockMvc.perform(post("/frete/calcular")
                         .contentType(MediaType.APPLICATION_JSON)
@@ -87,4 +74,23 @@ class FreteControllerIntegrationTest {
                 .andExpect(status().isBadRequest());
     }
 
+    @Test
+    void deveRetornarBadRequestParaPesoNegativo() throws Exception {
+        var requestDto = new PedidoFreteRequestDto(-1.0, 100.00, "NORMAL");
+
+        mockMvc.perform(post("/frete/calcular")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(requestDto)))
+                .andExpect(status().isBadRequest());
+    }
+
+    @Test
+    void deveRetornarBadRequestParaDistanciaNegativa() throws Exception {
+        var requestDto = new PedidoFreteRequestDto(100.00, -1.0, "NORMAL");
+
+        mockMvc.perform(post("/frete/calcular")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(requestDto)))
+                .andExpect(status().isBadRequest());
+    }
 }

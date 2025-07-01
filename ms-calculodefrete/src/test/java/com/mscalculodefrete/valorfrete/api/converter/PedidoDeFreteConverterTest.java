@@ -17,7 +17,7 @@ class PedidoDeFreteConverterTest {
     private final PedidoDeFreteConverter converter = new PedidoDeFreteConverter();
 
     @Test
-    void paraPedidoDeFrete_DeveConverterCorretamente() {
+    void deveConverterParaPedidoDeFreteCorretamente() {
         PedidoFreteRequestDto dto = new PedidoFreteRequestDto(2.0, 20.0, "NORMAL");
         PedidoDeFrete pedido = converter.paraPedidoDeFrete(dto, Transporte.NORMAL);
 
@@ -27,7 +27,7 @@ class PedidoDeFreteConverterTest {
     }
 
     @Test
-    void paraPedidoDeFreteResponseDto_DeveConverterCorretamente() {
+    void deveConverterParaResponseDtoCorretamente() {
         PedidoDeFrete pedido = mock(PedidoDeFrete.class);
         FreteContext context = mock(FreteContext.class);
         when(context.calcularValorDoFrete(pedido)).thenReturn(BigDecimal.valueOf(42));

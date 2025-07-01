@@ -33,7 +33,7 @@ class TransporteUseCaseTest {
     }
 
     @Test
-    void selecionarFreteStrategyDeveSetarFreteNormalQuandoTransporteNormal() {
+    void deveSetarFreteNormalQuandoTransporteNormal() {
         PedidoDeFrete pedido = mock(PedidoDeFrete.class);
         when(pedido.getTipoDeTransporte()).thenReturn(Transporte.NORMAL);
 
@@ -43,7 +43,7 @@ class TransporteUseCaseTest {
     }
 
     @Test
-    void selecionarFreteStrategyDeveSetarFreteExpressoQuandoTransporteExpresso() {
+    void deveSetarFreteExpressoQuandoTransporteExpresso() {
         PedidoDeFrete pedido = mock(PedidoDeFrete.class);
         when(pedido.getTipoDeTransporte()).thenReturn(Transporte.EXPRESSO);
 
@@ -53,7 +53,7 @@ class TransporteUseCaseTest {
     }
 
     @Test
-    void selecionarFreteStrategyErroTransporteNulo() {
+    void deveLancarExcecaoQuandoTransporteNulo() {
         PedidoDeFrete pedido = mock(PedidoDeFrete.class);
         when(pedido.getTipoDeTransporte()).thenReturn(null);
 
@@ -62,11 +62,13 @@ class TransporteUseCaseTest {
     }
 
     @Test
-    void selecionarFreteStrategyErroTransporteNaoRegistrado() {
+    void deveLancarExcecaoQuandoTransporteNaoRegistrado() {
         PedidoDeFrete pedido = mock(PedidoDeFrete.class);
-        when(pedido.getTipoDeTransporte()).thenReturn(null);
+        when(pedido.getTipoDeTransporte()).thenReturn(Transporte.NORMAL);
 
         estrategias.clear();
+
+        transporteUseCase = new TransporteUseCase(freteContext, estrategias);
 
         assertThrows(TransporteException.class, () -> transporteUseCase.selecionarFreteStrategy(pedido));
         verifyNoInteractions(freteContext);

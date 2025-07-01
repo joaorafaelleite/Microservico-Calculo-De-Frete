@@ -15,37 +15,57 @@ import static org.mockito.Mockito.*;
 class FreteContextTest {
 
     private FreteContext freteContext;
-    private FreteStrategyInterface freteStrategy;
-    private PedidoDeFreteInterface pedidoDeFrete;
+    private FreteStrategyInterface strategyMock;
+    private PedidoDeFreteInterface pedidoMock;
 
     @BeforeEach
     void setUp() {
-        freteStrategy = mock(FreteStrategyInterface.class);
-        pedidoDeFrete = mock(PedidoDeFreteInterface.class);
-        freteContext = new FreteContext(freteStrategy);
+        freteContext = new FreteContext();
+        strategyMock = mock(FreteStrategyInterface.class);
+        pedidoMock = mock(PedidoDeFrete.class);
     }
 
     @Test
-    void calcularValorDoFreteSucesso() {
-        BigDecimal valorEsperado = BigDecimal.valueOf(100.00);
-        when(freteStrategy.calcularValorDoFrete(pedidoDeFrete)).thenReturn(valorEsperado);
+    void deveCalcularValorDoFreteComStrategyDefinida() {
+        freteContext.setFreteStrategy(strategyMock);
+        when(strategyMock.calcularValorDoFrete(pedidoMock)).thenReturn(BigDecimal.valueOf(123.45));
 
-        BigDecimal resultado = freteContext.calcularValorDoFrete(pedidoDeFrete);
+        BigDecimal valor = freteContext.calcularValorDoFrete(pedidoMock);
 
-        assertEquals(valorEsperado, resultado);
-        verify(freteStrategy).calcularValorDoFrete(pedidoDeFrete);
+        assertEquals(BigDecimal.valueOf(123.45), valor);
+        verify(strategyMock).calcularValorDoFrete(pedidoMock);
     }
 
     @Test
-    void calcularValorDoFreteErroFreteStrategyNulo() {
-        FreteContext contextoComStrategyNula = new FreteContext(null);
+    void deveLancarExcecaoQuandoStrategyNaoDefinida() {
+        PedidoDeFreteInterface pedidoMock = mock(PedidoDeFrete.class);
+        FreteContext freteContext = new FreteContext();
 
-        assertThrows(BusinessException.class, () -> contextoComStrategyNula.calcularValorDoFrete(pedidoDeFrete));
+        BusinessException ex = assertThrows(BusinessException.class,
+                () -> freteContext.calcularValorDoFrete(pedidoMock));
+        assertTrue(ex.getMessage().toLowerCase().contains("erro ao realizar o calculo do frete"));
     }
 
     @Test
-    void calcularValorDoFreteErroPedidoNulo() {
-        RuntimeException thrown = assertThrows(PedidoDeFreteException.class, () -> freteContext.calcularValorDoFrete(null));
-                assertEquals("O pedido de frete é inválido, favor verificar as informações fornecidas", thrown.getMessage());
+    void deveLancarExcecaoQuandoPedidoNulo() {
+        freteContext = new FreteContext(strategyMock);
+        PedidoDeFreteException ex = assertThrows(PedidoDeFreteException.class,
+                () -> freteContext.calcularValorDoFrete(null));
+        assertTrue(ex.getMessage().toLowerCase().contains("pedido de frete é inválido"));
+    }
+
+
+    @Test
+    void devePermitirTrocarStrategyEmTempoDeExecucao() {
+        FreteStrategyInterface strategy1 = mock(FreteStrategyInterface.class);
+        FreteStrategyInterface strategy2 = mock(FreteStrategyInterface.class);
+
+        freteContext.setFreteStrategy(strategy1);
+        when(strategy1.calcularValorDoFrete(pedidoMock)).thenReturn(BigDecimal.TEN);
+        assertEquals(BigDecimal.TEN, freteContext.calcularValorDoFrete(pedidoMock));
+
+        freteContext.setFreteStrategy(strategy2);
+        when(strategy2.calcularValorDoFrete(pedidoMock)).thenReturn(BigDecimal.ONE);
+        assertEquals(BigDecimal.ONE, freteContext.calcularValorDoFrete(pedidoMock));
     }
 }

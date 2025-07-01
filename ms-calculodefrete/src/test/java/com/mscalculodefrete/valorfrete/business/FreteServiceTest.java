@@ -8,9 +8,7 @@ import com.mscalculodefrete.valorfrete.infrastructure.enums.Transporte;
 import com.mscalculodefrete.valorfrete.infrastructure.exceptions.TransporteException;
 import com.mscalculodefrete.valorfrete.infrastructure.models.FreteContext;
 import com.mscalculodefrete.valorfrete.infrastructure.models.PedidoDeFrete;
-import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.*;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
@@ -45,7 +43,7 @@ class FreteServiceTest {
     }
 
     @Test
-    void calcular_DeveRetornarResponseDto_QuandoTudoValido() {
+    void deveRetornarResponseDtoQuandoTudoValido() {
         PedidoFreteRequestDto requestDto = new PedidoFreteRequestDto(1.0, 10.0, "NORMAL");
         PedidoDeFrete pedidoDeFrete = mock(PedidoDeFrete.class);
         PedidoDeFreteResponseDto responseDto = new PedidoDeFreteResponseDto(java.math.BigDecimal.TEN);
@@ -62,8 +60,16 @@ class FreteServiceTest {
     }
 
     @Test
-    void calcular_DeveLancarTransporteException_QuandoTipoTransporteInvalido() {
+    void deveLancarTransporteExceptionQuandoTipoTransporteInvalido() {
         PedidoFreteRequestDto requestDto = new PedidoFreteRequestDto(1.0, 10.0, "INVALIDO");
+
+        assertThrows(TransporteException.class, () -> freteService.calcular(requestDto));
+        verifyNoInteractions(pedidoDeFreteConverter, transporteUseCase, freteContext);
+    }
+
+    @Test
+    void deveLancarTransporteExceptionQuandoTipoTransporteNulo() {
+        PedidoFreteRequestDto requestDto = new PedidoFreteRequestDto(1.0, 10.0, null);
 
         assertThrows(TransporteException.class, () -> freteService.calcular(requestDto));
         verifyNoInteractions(pedidoDeFreteConverter, transporteUseCase, freteContext);
