@@ -49,7 +49,7 @@ POST /frete/calcular - Realiza o cálculo do valor do frete de entrega para o ti
 }
 ```
 Caso queira utilizar o Postman para realizar maiores testes, incluindo cenários de erro, utilize a coleção:
-[MS-CalculoDeFrete Collection](https://web.postman.co/workspace/My-Workspace~ed064f2a-36a9-4345-822f-d5e18684c318/collection/26395023-70a56168-8b96-4523-b00e-99153bf6ce70?action=share&source=copy-link&creator=26395023)
+[MS-CalculoDeFrete Collection](https://www.postman.com/joaorafaelleite/workspace/ms-calculodefrete/collection/26395023-70a56168-8b96-4523-b00e-99153bf6ce70?action=share&source=copy-link&creator=26395023)
 
 
 ## Execução de Testes e Métricas de Testes
