@@ -4,7 +4,7 @@
 ![Spring](https://img.shields.io/badge/spring-%236DB33F.svg?style=for-the-badge&logo=spring&logoColor=white)
 [![Licence](https://img.shields.io/github/license/Ileriayo/markdown-badges?style=for-the-badge)](./LICENSE)
 
-Este projeto implementa um microserviço para cálculo de frete, desenvolvido em **Java**, **Spring Boot** e **Maven**, utilizando **JUnit** para testes e **JaCoCo** para cobertura de testes.
+Este projeto implementa um microserviço para o cálculo de frete, desenvolvido em Java, Spring Boot e Maven, utilizando JUnit para testes e JaCoCo para análise de cobertura.
 
 ## Índice
 - [Funcionalidades](#funcionalidades)
@@ -25,15 +25,19 @@ Este projeto implementa um microserviço para cálculo de frete, desenvolvido em
 ## Instalação
 
 ### 1️⃣ Clone o repositório
-git clone https://github.com/joaorafaelleite/Microservico-Calculo-De-Frete.git
+Abra o terminal de sua preferência, que tenha o Git instalado e configurado corretamente, no local onde deseja clonar o repositório.
+
+Execute o comando **git clone https://github.com/joaorafaelleite/Microservico-Calculo-De-Frete.git**
 
 ### 2️⃣ Instale as dependências
+Navegue até o diretório raiz do projeto.
+
 Execute o comando **mvn clean install**
 
 ## Uso do Projeto
 
 ### Execute o projeto
-Execute o run na classe MsCalculodefreteApplication
+Execute a aplicação a partir da classe MsCalculodefreteApplication.
 
 ### Endpoint
 
@@ -48,9 +52,19 @@ POST /frete/calcular - Realiza o cálculo do valor do frete de entrega para o ti
     "tipoDeTransporte": "NORMAL"
 }
 ```
-Caso queira utilizar o Postman para realizar maiores testes, incluindo cenários de erro, utilize a coleção:
+Caso queira utilizar o Postman para realizar testes mais completos, incluindo cenários de erro, utilize a coleção:
 [MS-CalculoDeFrete Collection](https://www.postman.com/joaorafaelleite/workspace/ms-calculodefrete/collection/26395023-70a56168-8b96-4523-b00e-99153bf6ce70?action=share&source=copy-link&creator=26395023)
 
+### (OPCIONAL) Execução via terminal (OPCIONAL)
+Navegue até o diretório principal.
+
+Execute o comando **mvn clean package**
+
+Execute o comando **mvn spring-boot:run**
+
+Exemplo de requisição via terminal:
+
+**curl -X POST -H "Content-Type: application/json" -d "{\"pesoDoPacote\":100.0,\"distanciaDaEntrega\":100.0,\"tipoDeTransporte\":\"NORMAL\"}" http://localhost:8080/frete/calcular**
 
 ## Execução de Testes e Métricas de Testes
 
@@ -70,7 +84,7 @@ Este projeto implementa a arquitetura hexagonal, separando as responsabilidades 
 O projeto foi desenvolvido tendo-se em mente os princípios SOLID, visando um projeto mais coeso, reaproveitável, com baixo acoplamento e fácil manutenção.
 
 **S**: Single Responsibility Principle (Princípio da responsabilidade única)
-  - As classes e métodos foram pensados de forma a terem apenas uma razão para serem alterados.
+  - As classes e métodos foram pensados de forma a terem apenas uma razão para serem modificados.
 
 **O**: Open-Closed Principle (Princípio Aberto-Fechado)
   - Novas estratégias de frete podem ser adicionadas sem modificar o core.
