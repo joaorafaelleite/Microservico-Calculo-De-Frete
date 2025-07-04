@@ -64,7 +64,9 @@ Execute o comando **mvn spring-boot:run**
 
 Exemplo de requisição via terminal:
 
-**curl -X POST -H "Content-Type: application/json" -d "{\"pesoDoPacote\":100.0,\"distanciaDaEntrega\":100.0,\"tipoDeTransporte\":\"NORMAL\"}" http://localhost:8080/frete/calcular**
+```markdown
+curl -X POST -H "Content-Type: application/json" -d "{\"pesoDoPacote\":100.0,\"distanciaDaEntrega\":100.0,\"tipoDeTransporte\":\"NORMAL\"}" http://localhost:8080/frete/calcular
+```
 
 ## Execução de Testes e Métricas de Testes
 
